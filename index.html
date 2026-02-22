@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cropguard – Help for Farmers</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Login Modal (demo) -->
+  <div id="loginModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <h3>Login to Cropguard</h3>
+      <label>Username
+        <input id="loginUser" type="text" placeholder="Your name" />
+      </label>
+      <label>Password
+        <input id="loginPass" type="password" placeholder="Password" />
+      </label>
+      <div class="modal-actions">
+        <button id="closeLogin" class="btn-ghost">Cancel</button>
+        <button id="doLogin" style="background:#2e7d32;border:none;color:#fff;padding:8px 12px;border-radius:6px;">Login</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard (hidden until login) -->
+  <section id="dashboard">
+    <div class="dashboard-card">
+      <h2>Welcome, <span id="dashboardName"></span></h2>
+      <p>Cropguard Dashboard: quick insights and actions.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+        <div style="min-width:180px;flex:1;"> 
+          <h4>Storage Risk</h4>
+          <p id="statStorage">—</p>
+        </div>
+        <div style="min-width:180px;flex:1;">
+          <h4>Market Forecast</h4>
+          <p id="statMarket">—</p>
+        </div>
+        <div style="min-width:180px;flex:1;">
+          <h4>Soil Health</h4>
+          <p id="statSoil">—</p>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <button id="logoutBtn" style="background:#c62828;color:#fff;padding:8px 12px;border:none;border-radius:6px;cursor:pointer;">Logout</button>
+      </div>
+    </div>
+  </section>
+  <header>
+    <h1>Cropguard</h1>
+    <nav>
+      <a href="#services">AI Services</a>
+      <a href="#tools">Tool Booking</a>
+      <a href="#assistant">Chat Assistant</a>
+      <a href="#contact">Contact</a>
+      <a href="#fertilizer">Fertilizer</a>
+      <button id="loginBtn">Login</button>
+      <span id="userArea" style="display:none;"></span>
+    </nav>
+  </header>
+
+  <!-- INTRO (shown before login/guest choice) -->
+<section id="intro" class="intro" aria-hidden="false">
+  <div class="intro-card">
+    <h2>Welcome to Cropguard</h2>
+    <p style="margin-top:8px;">
+      Cropguard helps farmers with simple AI-backed advice, disease checks, market insights and a demo tool booking flow.
+    </p>
+    <ul style="margin-top:10px; text-align:left; font-size:14px;">
+      <li>Try the demo AI chat and quick image checks without logging in.</li>
+      <li>Booking, contact, shop and critical actions require login to protect user data.</li>
+    </ul>
+    <div style="margin-top:14px; display:flex; gap:10px; justify-content:center;">
+      <button id="introLoginBtn" type="button" class="btn-primary" onclick="openLoginModalGlobal()">Login</button>
+      <button id="exploreGuestBtn" type="button" class="btn-ghost" onclick="exploreAsGuest()">Explore as Guest</button>
+    </div>
+    <p style="font-size:12px; color:#555; margin-top:10px;">Guest mode disables forms and booking actions. Login to access full features.</p>
+  </div>
+</section>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-text">
+      <h2>AI Help for Every Farmer 👨‍🌾🌾</h2>
+      <p>
+        Cropguard is a simple platform where farmers can get support from
+        artificial intelligence for crop planning, soil health, disease
+        detection, weather advice and market prices.
+      </p>
+      <p>
+        Now farmers can also <strong>book essential farm tools</strong> like
+        tractor, rotavator, sprayer and harvester as per their requirement.
+      </p>
+      <a href="#assistant" class="btn-primary">Try AI Assistant</a>
+    </div>
+
+    <div class="hero-image">
+      <h3>How AI & tools help farmers</h3>
+      <p>✅ Suggest best crops for the season</p>
+      <p>✅ Alert about possible diseases & pests</p>
+      <p>✅ Plan irrigation with weather forecast</p>
+      <p>✅ Book tools for sowing, spraying, harvesting</p>
+      <p style="margin-top:10px; font-size:12px;">
+        (This is a demo website – you can connect real AI & booking system later.)
+      </p>
+    </div>
+  </section>
+
+  <!-- AI SERVICES SECTION -->
+  <section id="services">
+    <h2 class="section-title">AI Services for Farmers</h2>
+
+    <div class="cards">
+      <div class="card">
+        <h3>🌱 Soil & Crop Advisor <span class="badge">AI Model</span></h3>
+        <p>
+          Get suggestions on which crop to grow based on soil type, rainfall,
+          and budget.
+        </p>
+        <ul>
+          <li>Enter soil type (red, black, sandy etc.)</li>
+          <li>Enter your state & rainfall pattern</li>
+          <li>AI suggests 2–3 suitable crops + fertilizer plan</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>🦠 Disease Detection Helper <span class="badge">Image + AI</span></h3>
+        <p>
+          Upload a leaf photo and Cropguard will provide a quick analysis
+          (demo client-side analyzer). This is a simple, local check — use as
+          guidance and consult a local agronomist for confirmation.
+        </p>
+        <div style="margin-top:8px;">
+          <input id="diseaseImageInput" type="file" accept="image/*" data-public="true" />
+        </div>
+        <div id="diseasePreviewWrap" style="margin-top:10px; display:none;">
+          <img id="diseasePreview" alt="leaf preview" style="max-width:220px; border-radius:8px; display:block;" />
+        </div>
+        <div style="margin-top:10px;">
+          <button id="analyzeBtn" data-public="true" style="padding:8px 12px; border-radius:6px; background:#2e7d32; color:#fff; border:none; cursor:pointer;">Analyze Image</button>
+        </div>
+        <div id="diseaseResult" style="margin-top:12px; font-size:14px;"></div>
+        <canvas id="diseaseCanvas" style="display:none;"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>🌦 Weather & Irrigation Planner <span class="badge">Data + AI</span></h3>
+        <p>
+          Based on location and crop, AI gives watering schedule ideas and
+          warns about heavy rain / heat.
+        </p>
+        <ul>
+          <li>Use location (district, village)</li>
+          <li>Check 7-day basic forecast (future API)</li>
+          <li>AI suggests when to irrigate or protect crops</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>💰 Market Price & Profit Estimator <span class="badge">Planning</span></h3>
+        <p>
+          AI helps estimate cost of seeds, fertilizer, labour and expected
+          selling price.
+        </p>
+        <ul>
+          <li>Farmer enters area (acre/hectare)</li>
+          <li>AI estimates input cost</li>
+          <li>Shows simple profit/loss scenario</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+<section id="insights">
+  <h2 class="section-title">Smart Farming Insights 📊</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>🍎 Spoilage & Storage Risk</h3>
+      <p>AI analyzes temperature and humidity to predict crop shelf-life.</p>
+      <div class="risk-indicator">
+        <strong>Storage Risk:</strong> <span id="riskLevel" class="tag" style="background: #ffebee; color: #c62828;">Low</span>
+      </div>
+      <p style="font-size: 12px; margin-top: 5px;">Best storage time: 4-6 months (Wheat)</p>
+    </div>
+
+    <div class="card">
+      <h3>📈 Market Price Forecast</h3>
+      <p>AI predicts price trends for the next 30 days based on demand.</p>
+      <table style="width:100%; font-size: 12px; margin-top: 5px;">
+        <tr><td>Current:</td><td>₹2,400/q</td></tr>
+        <tr><td><strong>Forecast:</strong></td><td><strong style="color: #2e7d32;">₹2,650/q (↑)</strong></td></tr>
+      </table>
+      <button class="btn-primary" style="margin-top:10px; width:100%;" onclick="alert('Analysis: Hold stock for 15 days for better profit.')">Get Selling Advice</button>
+    </div>
+
+    <div class="card">
+      <h3>🔄 Crop Rotation & Soil Health</h3>
+      <p>Plan your next 3 seasons to regenerate soil nutrients naturally.</p>
+      <ul style="font-size: 12px;">
+        <li>Current: Paddy</li>
+        <li><strong>Next Suggestion:</strong> Pulses (Nitrogen Fix)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section id="disease-detector">
+  <h2 class="section-title">AI Disease Detection Helper 🦠</h2>
+  <div class="tool-grid">
+    <div class="card">
+      <h3>Scan Your Crop</h3>
+      <p>Upload a clear photo of the affected leaf or plant part for instant AI analysis.</p>
+      
+      <div class="upload-container" style="border: 2px dashed #2e7d32; padding: 20px; text-align: center; border-radius: 12px; background: #fff;">
+        <input type="file" id="leafUpload" accept="image/*" onchange="previewImage(event)" style="display: none;" data-public="true">
+        <label for="leafUpload" class="btn-primary" style="cursor: pointer;" data-public="true">📸 Select Photo</label>
+        
+        <div id="imagePreviewContainer" style="margin-top: 15px; display: none;">
+          <img id="imagePreview" src="#" alt="Leaf Preview" style="max-width: 100%; border-radius: 8px; max-height: 200px;">
+          <button class="btn-primary" data-public="true" onclick="detectDisease()" style="margin-top: 10px; background: #1b5e20;">Start AI Scan</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="detectionResult" class="info-box" style="display: none;">
+      <h3 id="diseaseName" style="color: #c62828;">Detecting...</h3>
+      <p><strong>Status:</strong> <span id="diseaseStatus">Analyzing patterns...</span></p>
+      <hr style="margin: 10px 0;">
+      <h4>How to solve this:</h4>
+      <ul id="treatmentList" style="font-size: 14px; margin-top: 8px;">
+        </ul>
+      <p style="font-size: 11px; color: #666; margin-top: 10px;">*Consult a local agricultural officer before applying chemical treatments.</p>
+    </div>
+  </div>
+</section>
+<div class="status-tags" style="display: flex; gap: 10px; margin-bottom: 10px;">
+  <span id="severityTag" class="tag" style="background: #ffebee; color: #c62828; font-weight: bold;">Severity: High</span>
+  <span id="confidenceTag" class="tag" style="background: #e3f2fd; color: #1565c0;">AI Confidence: 94%</span>
+</div>
+
+<!-- Image analysis for Scan Your Crop section -->
+<script>
+  function previewImage(event) {
+    const preview = document.getElementById('imagePreview');
+    const container = document.getElementById('imagePreviewContainer');
+    const file = event.target.files[0];
+
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      container.style.display = 'block';
+      // clear previous results
+      const resultBox = document.getElementById('detectionResult');
+      if (resultBox) resultBox.style.display = 'none';
+    }
+  }
+
+  async function detectDisease(){
+    const fileInput = document.getElementById('leafUpload');
+    const resultBox = document.getElementById('detectionResult');
+    const diseaseName = document.getElementById('diseaseName');
+    const diseaseStatus = document.getElementById('diseaseStatus');
+    const treatmentList = document.getElementById('treatmentList');
+    const severityTag = document.getElementById('severityTag');
+    const confidenceTag = document.getElementById('confidenceTag');
+
+    if (!fileInput || !fileInput.files || !fileInput.files[0]){
+      alert('Please select an image first.');
+      return;
+    }
+
+    resultBox.style.display = 'block';
+    diseaseName.textContent = 'AI is analyzing your leaf...';
+    diseaseStatus.textContent = 'Scanning visual patterns...';
+    treatmentList.innerHTML = '<li>Processing image — please wait.</li>';
+
+    // Try client-side analysis (fast heuristic)
+    const file = fileInput.files[0];
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = function(){
+      // draw to an offscreen canvas
+      const maxDim = 300;
+      let w = img.width, h = img.height;
+      if (Math.max(w,h) > maxDim){
+        const scale = maxDim / Math.max(w,h);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      try{
+        const data = ctx.getImageData(0,0,w,h).data;
+        let samples = 0, brown=0, yellow=0, green=0;
+        const step = 8;
+        for (let y=0;y<h;y+=step){
+          for (let x=0;x<w;x+=step){
+            const i = (y*w + x)*4;
+            const r = data[i], g = data[i+1], b = data[i+2];
+            samples++;
+            if (r>110 && g<100 && b<90 && r>g && r> b) brown++;
+            else if (r>100 && g>80 && b<90 && r>g && g>b) yellow++;
+            else if (g>100 && g>r && g>b) green++;
+          }
+        }
+        const brownRatio = brown/samples;
+        const yellowRatio = yellow/samples;
+        const greenRatio = green/samples;
+
+        // Heuristic decision
+        let diagnosis='';
+        let confidence = Math.round((brownRatio+yellowRatio+greenRatio)*100);
+        if (brownRatio + yellowRatio > 0.12){
+          diagnosis = 'Possible disease or post-harvest spoilage detected';
+          diseaseName.style.color = '#c62828';
+          diseaseStatus.textContent = 'Symptoms: discoloration/spots detected.';
+          treatmentList.innerHTML = '<li>Isolate affected produce.</li><li>Check storage humidity and ventilation.</li><li>Consult local agricultural officer for confirmation and treatment.</li>';
+          severityTag.textContent = 'Severity: Medium-High';
+          severityTag.style.background = '#fff3e0';
+          severityTag.style.color = '#e65100';
+        } else if (greenRatio > 0.6){
+          diagnosis = 'Leaf appears generally healthy';
+          diseaseName.style.color = '#2e7d32';
+          diseaseStatus.textContent = 'No obvious discoloration detected.';
+          treatmentList.innerHTML = '<li>Continue regular monitoring.</li><li>Maintain proper storage practices.</li>';
+          severityTag.textContent = 'Severity: Low';
+          severityTag.style.background = '#e8f5e9';
+          severityTag.style.color = '#1b5e20';
+        } else {
+          diagnosis = 'Inconclusive result — please retake photo with close-up of symptoms';
+          diseaseName.style.color = '#6a1b9a';
+          diseaseStatus.textContent = 'Image may be low-contrast or symptom area not focused.';
+          treatmentList.innerHTML = '<li>Retake photo closer to symptomatic area with good lighting.</li>';
+          severityTag.textContent = 'Severity: Unknown';
+          severityTag.style.background = '#e0e0e0';
+          severityTag.style.color = '#333';
+        }
+
+        diseaseName.textContent = diagnosis;
+        confidence = Math.min(98, Math.max(30, Math.round((brownRatio+yellowRatio)*100)+40));
+        confidenceTag.textContent = 'AI Confidence: ' + confidence + '%';
+        confidenceTag.style.background = '#e3f2fd';
+
+        // Smooth scroll to results
+        resultBox.scrollIntoView({behavior:'smooth'});
+      }catch(e){
+        diseaseName.textContent = 'Analysis error';
+        diseaseStatus.textContent = 'Could not process image.';
+        treatmentList.innerHTML = '<li>Try a different image.</li>';
+      }
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = function(){
+      alert('Unable to load image.');
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  }
+</script>
+  <!-- TOOL BOOKING SECTION -->
+  <section id="tools">
+    <h2 class="section-title">Book Farm Tools as per Requirement</h2>
+
+    <div class="tool-grid">
+      <!-- Tool list -->
+      <div class="tool-list">
+        <h3>Available Tools (Demo List)</h3>
+        <p style="margin-top:6px;">
+          These are sample tools. In the real version, this list can come from a
+          database of machine owners / custom hiring centres.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Tool / Machine</th>
+              <th>Use</th>
+              <th>Approx. Rate</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tractor (35–50 HP)</td>
+              <td>Tillage, transport</td>
+              <td>₹500–800 / hr</td>
+              <td><span class="tag">Available</span></td>
+            </tr>
+            <tr>
+              <td>Rotavator</td>
+              <td>Seedbed preparation</td>
+              <td>₹900–1200 / acre</td>
+              <td><span class="tag">Available</span></td>
+            </tr>
+            <tr>
+              <td>Power Sprayer</td>
+              <td>Spraying pesticide/fertilizer</td>
+              <td>₹150–250 / tank</td>
+              <td><span class="tag">Limited</span></td>
+            </tr>
+            <tr>
+              <td>Combine Harvester</td>
+              <td>Paddy/Wheat harvesting</td>
+              <td>₹1800–2500 / acre</td>
+              <td><span class="tag">Pre-Booking</span></td>
+            </tr>
+            <tr>
+              <td>Seed Drill</td>
+              <td>Line sowing</td>
+              <td>₹600–900 / acre</td>
+              <td><span class="tag">Available</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:8px; font-size:12px;">
+          *Rates are only example values for the demo. Actual rates depend on village, fuel price and machine owner.
+        </p>
+      </div>
+
+      <!-- Booking form -->
+      <form onsubmit="handleToolBooking(event)">
+        <h3 style="margin-bottom:10px;">Tool Booking Request</h3>
+
+        <label for="bname">Farmer Name</label>
+        <input
+          type="text"
+          id="bname"
+          placeholder="Enter your name"
+          required
+        />
+
+        <label for="bmobile">Mobile Number</label>
+        <input
+          type="text"
+          id="bmobile"
+          placeholder="10-digit mobile number"
+          required
+        />
+
+        <label for="bvillage">Village / City</label>
+        <input
+          type="text"
+          id="bvillage"
+          placeholder="Village or town"
+          required
+        />
+
+        <label for="btool">Select Tool</label>
+        <select id="btool" required>
+          <option value="">Select a tool</option>
+          <option value="Tractor">Tractor (35–50 HP)</option>
+          <option value="Rotavator">Rotavator</option>
+          <option value="Sprayer">Power Sprayer</option>
+          <option value="Harvester">Combine Harvester</option>
+          <option value="Seed Drill">Seed Drill</option>
+        </select>
+
+        <label for="bdate">Required Date</label>
+        <input type="date" id="bdate" required />
+
+        <label for="btime">Preferred Time</label>
+        <input
+          type="time"
+          id="btime"
+          required
+        />
+
+        <label for="bhours">Approx. Hours / Area</label>
+        <input
+          type="text"
+          id="bhours"
+          placeholder="E.g. 4 hours or 2 acre"
+        />
+
+        <label for="bnote">Extra Details (optional)</label>
+        <textarea
+          id="bnote"
+          placeholder="Field type, crop, any special requirement"
+        ></textarea>
+
+        <button type="submit">Submit Booking</button>
+        <p id="bookingMessage" style="margin-top:8px; font-size:13px; color:#1b5e20;"></p>
+      </form>
+    </div>
+  </section>
+<section id="land">
+  <h2 class="section-title">Land Rent & Land Take</h2>
+
+  <!-- BUTTONS -->
+  <div class="cards">
+    <div class="card" style="text-align:center;">
+      <h3>🌾 Take Land on Rent</h3>
+      <p>For farmers who want land for cultivation</p>
+      <button class="btn-primary" onclick="showLandForm('take')">
+        Take Land
+      </button>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <h3>🏡 Give Land on Rent</h3>
+      <p>For land owners who want to lease land</p>
+      <button class="btn-primary" onclick="showLandForm('rent')">
+        Give Land
+      </button>
+    </div>
+  </div>
+
+  <!-- TAKE LAND FORM -->
+  <form id="takeLandForm" style="display:none; margin-top:30px;" onsubmit="handleLandTake(event)">
+    <h3>🌾 Take Land on Rent</h3>
+
+    <label>Name</label>
+    <input type="text" required placeholder="Farmer name" />
+
+    <label>Mobile</label>
+    <input type="text" required placeholder="10-digit mobile number" />
+
+    <label>Village / District</label>
+    <input type="text" required placeholder="Location" />
+
+    <label>Required Area</label>
+    <select required>
+      <option value="">Select</option>
+      <option>Less than 1 acre</option>
+      <option>1–3 acre</option>
+      <option>3–5 acre</option>
+      <option>5+ acre</option>
+    </select>
+
+    <label>Crop Purpose</label>
+    <input type="text" placeholder="Paddy, Vegetables, Wheat" />
+
+    <label>Lease Duration</label>
+    <select>
+      <option>6 months</option>
+      <option>1 year</option>
+      <option>More than 1 year</option>
+    </select>
+
+    <label>Budget (₹ / acre)</label>
+    <input type="text" placeholder="e.g. 20000" />
+
+    <button type="submit">Submit Request</button>
+  </form>
+
+  <!-- GIVE LAND FORM -->
+  <form id="rentLandForm" style="display:none; margin-top:30px;" onsubmit="handleLandRent(event)">
+    <h3>🏡 Give Land on Rent</h3>
+
+    <label>Owner Name</label>
+    <input type="text" required placeholder="Owner name" />
+
+    <label>Mobile</label>
+    <input type="text" required placeholder="10-digit mobile number" />
+
+    <label>Land Location</label>
+    <input type="text" required placeholder="Village / District" />
+
+    <label>Total Area</label>
+    <select required>
+      <option value="">Select</option>
+      <option>Less than 1 acre</option>
+      <option>1–3 acre</option>
+      <option>3–5 acre</option>
+      <option>5+ acre</option>
+    </select>
+
+    <label>Soil Type</label>
+    <input type="text" placeholder="Black / Red / Alluvial" />
+
+    <label>Expected Rent (₹ / acre)</label>
+    <input type="text" placeholder="e.g. 25000" />
+
+    <label>Lease Period</label>
+    <select>
+      <option>6 months</option>
+      <option>1 year</option>
+      <option>More than 1 year</option>
+    </select>
+
+    <button type="submit">Submit Land</button>
+  </form>
+</section>
+
+  <script>
+    // Simple client-side leaf analyzer (demo). Uses color sampling to detect
+    // high proportion of brown/yellow pixels which may indicate spots/spoilage.
+    (function(){
+      const input = document.getElementById('diseaseImageInput');
+      const preview = document.getElementById('diseasePreview');
+      const previewWrap = document.getElementById('diseasePreviewWrap');
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      const resultEl = document.getElementById('diseaseResult');
+      const canvas = document.getElementById('diseaseCanvas');
+
+      function showMessage(html, isWarning){
+        resultEl.innerHTML = html;
+        resultEl.style.color = isWarning ? '#a43' : '#133';
+      }
+
+      function analyzeImageFile(file){
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = function(){
+          // draw to canvas scaled
+          const maxDim = 300;
+          let w = img.width, h = img.height;
+          if (Math.max(w,h) > maxDim){
+            const scale = maxDim / Math.max(w,h);
+            w = Math.round(w * scale);
+            h = Math.round(h * scale);
+          }
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img,0,0,w,h);
+
+          try{
+            const data = ctx.getImageData(0,0,w,h).data;
+            let samples = 0, brownCount = 0, yellowCount = 0, greenCount = 0;
+            // sample every Nth pixel to keep it fast
+            const step = 8;
+            for (let y=0; y<h; y+=step){
+              for (let x=0; x<w; x+=step){
+                const i = (y*w + x) * 4;
+                const r = data[i], g = data[i+1], b = data[i+2];
+                samples++;
+                // simple heuristics for brown/yellow/green
+                if (r > 100 && g > 60 && b < 80 && r > g && g > b){
+                  yellowCount++;
+                } else if (r > 100 && g < 90 && b < 90 && r > g && r > b){
+                  brownCount++;
+                } else if (g > r && g > b && g > 80){
+                  greenCount++;
+                }
+              }
+            }
+
+            const brownRatio = brownCount / samples;
+            const yellowRatio = yellowCount / samples;
+            const greenRatio = greenCount / samples;
+
+            let diagnosis = '';
+            if (brownRatio + yellowRatio > 0.12){
+              diagnosis = '<strong>Possible disease or post-harvest spoilage detected.</strong> Signs: spots/discoloration.';
+              diagnosis += '<br>Recommendation: isolate affected produce, check storage humidity/temperature, consult local expert.';
+              showMessage(diagnosis, true);
+            } else if (greenRatio > 0.6){
+              diagnosis = '<strong>Leaf appears generally healthy.</strong> Few signs of major discoloration.';
+              diagnosis += '<br>Recommendation: continue regular monitoring and good storage practices.';
+              showMessage(diagnosis, false);
+            } else {
+              diagnosis = '<strong>Inconclusive result.</strong> Image may be low-contrast or not focused on symptoms.';
+              diagnosis += '<br>Recommendation: retake photo closer to symptomatic area and ensure good lighting.';
+              showMessage(diagnosis, true);
+            }
+          }catch(e){
+            showMessage('<strong>Error analyzing image.</strong> Try a different photo.', true);
+          }
+
+          URL.revokeObjectURL(url);
+        };
+        img.onerror = function(){
+          showMessage('<strong>Unable to load image.</strong>', true);
+          URL.revokeObjectURL(url);
+        };
+        img.src = url;
+      }
+
+      input && input.addEventListener('change', function(e){
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        // show preview
+        const pUrl = URL.createObjectURL(f);
+        preview.src = pUrl;
+        previewWrap.style.display = 'block';
+        showMessage('Image ready. Click "Analyze Image" to run a quick check.', false);
+      });
+
+      analyzeBtn && analyzeBtn.addEventListener('click', function(){
+        const f = input.files && input.files[0];
+        if (!f){ showMessage('Please select an image first.', true); return; }
+        showMessage('Analyzing image...', false);
+        setTimeout(()=> analyzeImageFile(f), 150); // small delay for UX
+      });
+    })();
+  </script>
+
+  <script>
+(function(){
+  const loginBtn = document.getElementById('loginBtn');
+  const loginModal = document.getElementById('loginModal');
+  const closeLogin = document.getElementById('closeLogin');
+  const doLogin = document.getElementById('doLogin');
+  const loginUser = document.getElementById('loginUser');
+  const loginPass = document.getElementById('loginPass');
+  const userArea = document.getElementById('userArea');
+  const dashboard = document.getElementById('dashboard');
+  const dashboardName = document.getElementById('dashboardName');
+
+  const intro = document.getElementById('intro');
+  const introLoginBtn = document.getElementById('introLoginBtn');
+  const exploreGuestBtn = document.getElementById('exploreGuestBtn');
+
+  function openLogin(){ loginModal.classList.remove('hidden'); loginModal.setAttribute('aria-hidden','false'); }
+  function closeLoginModal(){ loginModal.classList.add('hidden'); loginModal.setAttribute('aria-hidden','true'); }
+
+  function setProtectedState(isAuthenticated){
+    const selector = 'input, select, textarea, button';
+    document.querySelectorAll(selector).forEach(el=>{
+      if (el.closest('#loginModal')) return;
+      if (el.tagName === 'A'){ el.disabled = false; el.classList.remove('locked'); return; }
+      if (el.dataset && el.dataset.public === "true"){ el.disabled = false; el.classList.remove('locked'); return; }
+      if (el.id === 'introLoginBtn' || el.id === 'exploreGuestBtn' || el.id === 'loginBtn'){ el.disabled = false; el.classList.remove('locked'); return; }
+      if (isAuthenticated){ el.disabled = false; el.classList.remove('locked'); } else { el.disabled = true; el.classList.add('locked'); }
+    });
+    document.querySelectorAll('form, .tool-list, .card, #shopping .card').forEach(section=>{
+      if (section.closest('#intro')) return;
+      if (!isAuthenticated) section.classList.add('dim-protected'); else section.classList.remove('dim-protected');
+    });
+  }
+
+  function showDashboardFor(name){
+    document.querySelectorAll('section').forEach(s=>s.style.display='none');
+    dashboard.classList.add('visible'); dashboard.style.display='block';
+    dashboardName.textContent = name;
+    userArea.style.display = 'inline-block';
+    userArea.innerHTML = '<span class="user-badge">'+name+'</span> <button id="navLogout" style="margin-left:8px;">Logout</button>';
+    if (intro) intro.style.display = 'none';
+    setProtectedState(true);
+  }
+
+  function logout(){ localStorage.removeItem('cropguardUser'); location.reload(); }
+
+  loginBtn && loginBtn.addEventListener('click', openLogin);
+  closeLogin && closeLogin.addEventListener('click', closeLoginModal);
+  doLogin && doLogin.addEventListener('click', function(){
+    const name = (loginUser.value||'').trim(); const pass = (loginPass.value||'').trim();
+    if (!name || !pass){ alert('Please enter username and password (demo).'); return; }
+    localStorage.setItem('cropguardUser', name);
+    closeLoginModal(); showDashboardFor(name);
+  });
+
+  introLoginBtn && introLoginBtn.addEventListener('click', openLogin);
+  exploreGuestBtn && exploreGuestBtn.addEventListener('click', function(){
+    if (intro) intro.style.display='none';
+    document.querySelectorAll('section').forEach(s=>s.style.display='');
+    setProtectedState(false);
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  const existing = localStorage.getItem('cropguardUser');
+  if (existing) showDashboardFor(existing);
+  else { if (intro) { document.querySelectorAll('section').forEach(s=>{ if (s.id!=='intro') s.style.display=''; }); intro.style.display=''; } setProtectedState(false); }
+
+  document.addEventListener('click', function(e){ if (e.target && e.target.id === 'navLogout'){ logout(); } });
+})();
+</script>
+  <!-- INTRO (shown before login/guest choice) -->
+   
+  <!-- AI CHAT ASSISTANT (DEMO) -->
+  <section id="assistant">
+    <h2 class="section-title">Cropguard Assistant (Demo)</h2>
+
+    <div class="ai-chat">
+      <div class="chat-box">
+        <div class="chat-window" id="chatWindow">
+          <div class="msg ai">
+            <strong>AI:</strong> Namaste! I am Cropguard. How can I help
+            you today? You can ask about crops, soil, fertilizer, tools or simple
+            profit planning.
+          </div>
+        </div>
+        <div class="chat-input">
+          <input
+            type="text"
+            id="userInput"
+            data-public="true"
+            placeholder="Example: Which crop is best for Kharif season in Odisha?"
+          />
+          <button data-public="true" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h3 style="margin-bottom:8px;">How this demo works?</h3>
+        <p style="margin-bottom:8px;">
+          This is a simple front-end demo. It <strong>does not call real AI
+          servers</strong> yet. It just shows how a chat box and booking system
+          will look.
+        </p>
+        <ul>
+          <li>Type your farming question in the box.</li>
+          <li>Click <strong>Send</strong>.</li>
+          <li>A sample AI reply will appear (rule-based message).</li>
+        </ul>
+        <p style="margin-top:8px;">
+          Later, you or a developer can connect this chat and tool booking form
+          to real backend services using APIs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+<section id="shopping">
+  <h2 class="section-title">Farm Input Shopping</h2>
+
+  <!-- SHOPPING BUTTONS -->
+  <div class="cards">
+    <div class="card" style="text-align:center;">
+      <h3>🌾 Seeds</h3>
+      <p>Paddy, Wheat, Maize, Vegetables</p>
+      <button class="btn-primary" onclick="showShopForm('seed')">
+        Buy Seeds
+      </button>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <h3>🧪 Fertilizer</h3>
+      <p>Urea, DAP, NPK, Organic</p>
+      <button class="btn-primary" onclick="showShopForm('fertilizer')">
+        Buy Fertilizer
+      </button>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <h3>🧴 Pesticide</h3>
+      <p>Insecticide, Fungicide</p>
+      <button class="btn-primary" onclick="showShopForm('pesticide')">
+        Buy Medicine
+      </button>
+    </div>
+  </div>
+
+  <!-- SEED FORM -->
+  <form id="seedForm" style="display:none; margin-top:30px;" onsubmit="handleShop(event, 'Seed')">
+    <h3>🌾 Seed Order</h3>
+
+    <label>Name</label>
+    <input type="text" required />
+
+    <label>Mobile</label>
+    <input type="text" required />
+
+    <label>Village</label>
+    <input type="text" required />
+
+    <label>Seed Type</label>
+    <select required>
+      <option>Paddy</option>
+      <option>Wheat</option>
+      <option>Maize</option>
+      <option>Vegetable</option>
+      <option>Pulses</option>
+    </select>
+
+    <label>Quantity</label>
+    <select>
+      <option>1 kg</option>
+      <option>5 kg</option>
+      <option>10 kg</option>
+      <option>More</option>
+    </select>
+
+    <button type="submit">Place Order</button>
+  </form>
+
+  <!-- FERTILIZER FORM -->
+  <form id="fertilizerForm" style="display:none; margin-top:30px;" onsubmit="handleShop(event, 'Fertilizer')">
+    <h3>🧪 Fertilizer Order</h3>
+
+    <label>Name</label>
+    <input type="text" required />
+
+    <label>Mobile</label>
+    <input type="text" required />
+
+    <label>Village</label>
+    <input type="text" required />
+
+    <label>Fertilizer Type</label>
+    <select required>
+      <option>Urea</option>
+      <option>DAP</option>
+      <option>NPK</option>
+      <option>MOP</option>
+      <option>Organic Compost</option>
+    </select>
+
+    <label>Quantity</label>
+    <select>
+      <option>1 bag (50 kg)</option>
+      <option>2 bags</option>
+      <option>5 bags</option>
+      <option>10+ bags</option>
+    </select>
+
+    <label>Crop</label>
+    <input type="text" placeholder="Paddy, Wheat" />
+
+    <button type="submit">Place Order</button>
+  </form>
+
+  <!-- PESTICIDE FORM -->
+  <form id="pesticideForm" style="display:none; margin-top:30px;" onsubmit="handleShop(event, 'Pesticide')">
+    <h3>🧴 Pesticide / Medicine Order</h3>
+
+    <label>Name</label>
+    <input type="text" required />
+
+    <label>Mobile</label>
+    <input type="text" required />
+
+    <label>Village</label>
+    <input type="text" required />
+
+    <label>Crop</label>
+    <input type="text" placeholder="Paddy, Vegetable" />
+
+    <label>Problem Type</label>
+    <select>
+      <option>Insects</option>
+      <option>Fungus</option>
+      <option>Weeds</option>
+    </select>
+
+    <label>Medicine Type</label>
+    <select>
+      <option>Insecticide</option>
+      <option>Fungicide</option>
+      <option>Herbicide</option>
+    </select>
+
+    <button type="submit">Submit Request</button>
+  </form>
+</section>
+
+  <!-- CONTACT / REGISTER SECTION -->
+  <section id="contact">
+    <h2 class="section-title">Register Your Farm / Contact Us</h2>
+
+    <div class="contact-grid">
+      <form onsubmit="handleForm(event)">
+        <label for="name">Farmer Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" required />
+
+        <label for="village">Village / City</label>
+        <input type="text" id="village" placeholder="Enter village or town name" required />
+
+        <label for="state">State</label>
+        <input type="text" id="state" placeholder="Enter your state" required />
+
+        <label for="crop">Main Crop</label>
+        <input type="text" id="crop" placeholder="E.g. Paddy, Wheat, Vegetables" />
+
+        <label for="area">Area of Land</label>
+        <select id="area">
+          <option value="">Select</option>
+          <option value="less1">Less than 1 acre</option>
+          <option value="1to3">1–3 acre</option>
+          <option value="3to5">3–5 acre</option>
+          <option value="5plus">More than 5 acre</option>
+        </select>
+
+        <label for="msg">What help do you want from AI?</label>
+        <textarea id="msg" placeholder="Example: I want help with crop planning for next season."></textarea>
+
+        <button type="submit">Submit Request</button>
+      </form>
+
+      <div class="contact-info">
+        <h3 style="margin-bottom:10px;">Why register?</h3>
+        <p style="margin-bottom:8px;">
+          When farmers register, Cropguard team can:
+        </p>
+        <ul>
+          <li>Understand which crops and problems are most common.</li>
+          <li>Train better AI models for local conditions.</li>
+          <li>Send simple reports and tips (via SMS or WhatsApp in future).</li>
+        </ul>
+        <p style="margin-top:10px;">
+          For now this form is only a front-end demo. Data is <strong>not</strong>
+          being saved to any database yet – you can connect it later with
+          Google Sheets, Firebase, or any backend service.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Cropguard – Demo website for AI-based farmer support & tool booking.
+  </footer>
+
+  <script>
+    // Simple demo logic for the chat – not real AI
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatWindow = document.getElementById("chatWindow");
+
+      // Add user message
+      const userMsg = document.createElement("div");
+      userMsg.className = "msg user";
+      userMsg.innerHTML = "<strong>You:</strong> " + text;
+      chatWindow.appendChild(userMsg);
+
+      // Create basic AI reply (demo)
+      let reply =
+        "Thank you for your question. I am a demo AI. In the future I will give you detailed advice based on your soil, crop and location.";
+
+      const lower = text.toLowerCase();
+
+      if (lower.includes("crop")) {
+        reply =
+          "Demo AI: For Kharif season, you can consider paddy, maize or pulses depending on rainfall and soil. Please also check with your local agriculture officer for final guidance.";
+      } else if (lower.includes("disease") || lower.includes("leaf")) {
+        reply =
+          "Demo AI: For leaf diseases, first identify the pattern (spots, yellowing, fungus). Keep affected leaves separately and consult a local expert. In the future, this AI can analyse your leaf photo.";
+      } else if (lower.includes("price") || lower.includes("market")) {
+        reply =
+          "Demo AI: Market prices change daily. You can check your nearest mandi or official government price portal. Later this AI can show live prices for your district.";
+      } else if (lower.includes("water") || lower.includes("irrigation")) {
+        reply =
+          "Demo AI: Try to irrigate based on soil moisture, crop stage and weather forecast. Avoid overwatering. In future this AI can use weather APIs for more exact suggestions.";
+      } else if (lower.includes("tool") || lower.includes("tractor") || lower.includes("harvester")) {
+        reply =
+          "Demo AI: You can submit a tool booking request in the Tool Booking section. In future, this AI can also suggest the right machine and time based on your field size and crop.";
+      }
+
+      const aiMsg = document.createElement("div");
+      aiMsg.className = "msg ai";
+      aiMsg.innerHTML = "<strong>AI:</strong> " + reply;
+      chatWindow.appendChild(aiMsg);
+
+      // Scroll to bottom
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+
+      // Clear input
+      input.value = "";
+    }
+
+    // Simple dummy contact form handler
+    function handleForm(event) {
+      event.preventDefault();
+      alert(
+        "Thank you for registering! In the real version, your farm details will be saved and AI advisory will be shared."
+      );
+    }
+
+    // Simple dummy tool booking handler
+    function handleToolBooking(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("bname").value.trim();
+      const tool = document.getElementById("btool").value;
+      const date = document.getElementById("bdate").value;
+      const village = document.getElementById("bvillage").value.trim();
+      const msgElement = document.getElementById("bookingMessage");
+
+      if (!name || !tool || !date || !village) {
+        msgElement.style.color = "red";
+        msgElement.textContent = "Please fill all required fields.";
+        return;
+      }
+
+      msgElement.style.color = "#1b5e20";
+      msgElement.textContent =
+        "Thank you, " +
+        name +
+        "! Your booking request for " +
+        tool +
+        " on " +
+        date +
+        " at " +
+        village +
+        " has been recorded (demo). In the real system, our team will call you for confirmation.";
+
+      // Optionally reset the form
+      event.target.reset();
+    }
+    
+  </script>
+</body>
+</html>
+<script>
+  function showLandForm(type) {
+    document.getElementById("takeLandForm").style.display = "none";
+    document.getElementById("rentLandForm").style.display = "none";
+
+    if (type === "take") {
+      document.getElementById("takeLandForm").style.display = "block";
+    } else {
+      document.getElementById("rentLandForm").style.display = "block";
+    }
+
+    // Scroll smoothly to form
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.getElementById(type === "take" ? "takeLandForm" : "rentLandForm").offsetTop - 80,
+        behavior: "smooth"
+      });
+    }, 100);
+  }
+
+  function handleLandTake(event) {
+    event.preventDefault();
+    alert("Land Take request submitted successfully (demo).");
+    event.target.reset();
+  }
+
+  function handleLandRent(event) {
+    event.preventDefault();
+    alert("Land Rent details submitted successfully (demo).");
+    event.target.reset();
+  }
+</script>
+<script>
+  function showFertilizerForm(type) {
+    document.getElementById("chemicalForm").style.display = "none";
+    document.getElementById("organicForm").style.display = "none";
+
+    if (type === "chemical") {
+      document.getElementById("chemicalForm").style.display = "block";
+    } else {
+      document.getElementById("organicForm").style.display = "block";
+    }
+
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.getElementById(type === "chemical" ? "chemicalForm" : "organicForm").offsetTop - 80,
+        behavior: "smooth"
+      });
+    }, 100);
+  }
+
+  function handleFertilizer(event) {
+    event.preventDefault();
+    alert(
+      "Fertilizer order submitted successfully (demo). In the real system, nearby sellers or cooperatives will contact you."
+    );
+    event.target.reset();
+  }
+</script>
+<script>
+  // Global helpers to ensure intro buttons work even if IIFE scope isn't available
+  function openLoginModalGlobal(){
+    const modal = document.getElementById('loginModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  function exploreAsGuest(){
+    const intro = document.getElementById('intro');
+    if (intro) intro.style.display = 'none';
+
+    // Show all sections (guest view)
+    document.querySelectorAll('section').forEach(s=> s.style.display = '');
+
+    // Clear any previous disabled/locked state first
+    const selector = 'input, select, textarea, button';
+    document.querySelectorAll(selector).forEach(el=>{
+      if (el.closest('#loginModal')) return;
+      try{ el.disabled = false; }catch(e){}
+      el.classList.remove('locked');
+    });
+
+    // Now disable protected controls while keeping 'data-public' elements enabled
+    document.querySelectorAll(selector).forEach(el=>{
+      if (el.closest('#loginModal')) return;
+      if (el.tagName === 'A') return; // keep links active
+      if (el.dataset && el.dataset.public === 'true') return; // public control
+      if (el.id === 'introLoginBtn' || el.id === 'exploreGuestBtn' || el.id === 'loginBtn') return;
+      try{ el.disabled = true; }catch(e){}
+      el.classList.add('locked');
+    });
+
+    // visually dim protected areas
+    document.querySelectorAll('form, .tool-list, .card, #shopping .card').forEach(section=>{
+      if (section.closest('#intro')) return;
+      section.classList.add('dim-protected');
+    });
+
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+
